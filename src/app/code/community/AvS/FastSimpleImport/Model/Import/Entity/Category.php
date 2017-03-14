@@ -1026,8 +1026,17 @@ class AvS_FastSimpleImport_Model_Import_Entity_Category extends Mage_ImportExpor
                 $message = 'Decimal value expected. Your Input: '.$rowData[$attrCode];
                 break;
             case 'select':
-            case 'multiselect':
                 $valid = isset($attrParams['options'][strtolower($rowData[$attrCode])]);
+                $message = 'Possible options are: ' . implode(', ', array_keys($attrParams['options'])) . '. Your input: ' . $rowData[$attrCode];
+                break;
+            case 'multiselect':
+                $values = explode(',', $rowData[$attrCode]);
+                $valid  = true;
+                foreach ($values as $value) {
+                    if (!isset($attrParams['options'][strtolower($value)])) {
+                        $valid = false;
+                    }
+                }
                 $message = 'Possible options are: ' . implode(', ', array_keys($attrParams['options'])) . '. Your input: ' . $rowData[$attrCode];
                 break;
             case 'int':
